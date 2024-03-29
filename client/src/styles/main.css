@@ -1,0 +1,261 @@
+/*VISUAL*/
+.visual {
+  margin-top: 70px;
+  background-image: url("../img/Summer1_ph2_main_bg_02.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.visual .inner {
+  height: 646px;
+  width: 1100px;
+}
+.visual .inner #popcon0 {
+  height: 281px;
+  width: 690px;
+}
+.visual .title {
+  position: absolute;
+  top: 68px;
+  left: -10px;
+}
+.visual .title .btn {
+  position: absolute;
+  top: 259px;
+  left: 173px;
+}
+.visual .popcon1.image {
+  position: absolute;
+  bottom: 100px;
+  right: -77px;
+}
+.visual .popcon1.text {
+  position: absolute;
+  height: 150px;
+  width: 350px;
+  top: 38px;
+  right: 171px;
+}
+.visual .popcon2.image {
+  position: absolute;
+  bottom: 0;
+  right: 260px;
+}
+.visual .popcon2.text {
+  position: absolute;
+  height: 150px;
+  width: 350px;
+  top: 371px;
+  right: 686px;
+}
+.visual .fade-in {
+  opacity: 0;
+}
+
+
+/*NOTICE*/
+/*NOTICE LINE*/
+.movie-text {
+  font-size: 50px;
+  font-weight: bold;
+  margin: 10px 0;
+  text-align: center;
+}
+.notice .notice-line {
+  position: relative;
+}
+.notice .notice-line .bg-left {
+  width: 50%;
+  height: 100%;
+  background-color: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.notice .notice-line .bg-right {
+  width: 50%;
+  height: 100%;
+  background-color: #f6f5ef;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.notice .notice-line .inner {
+  height: 62px;
+  z-index: 1;
+  display: flex;
+}
+.notice .notice-line .inner__left {
+  width: 60%;
+  height: 100%;
+  background-color: #333;
+  display: flex;
+  align-items: center;
+}
+.notice .notice-line .inner__left h2 {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  margin-right: 20px;
+}
+.notice .notice-line .inner__left .swiper-container {
+  height: 62px;
+  flex-grow: 1;
+}
+.notice .notice-line .inner__left .swiper-slide {
+  height: 62px;
+  display: flex;
+  align-items: center;
+}
+.notice .notice-line .inner__left .swiper-slide a {
+  color: #fff;
+}
+.notice .notice-line .inner__left .notice-line__more {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notice .notice-line .inner__left .notice-line__more .material-icons {
+  color: #fff;
+  font-size: 30px;
+}
+.notice .notice-line .inner__right {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.notice .notice-line .inner__right h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.notice .notice-line .inner__right .toggle-promotion {
+  width: 62px;
+  height: 62px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notice .notice-line .inner__right .toggle-promotion .material-icons {
+  font-size: 30px;
+}
+/*PROMOTION*/
+.notice .promotion {
+  /*width: auto;*/
+  height: 693px;
+  background-color: #f6f5ef;
+  position: relative;
+  overflow: hidden;
+  transition: height .4s;
+}
+.notice .promotion.hide {
+  height: 0;
+}
+.notice .promotion .swiper-container {
+  /* 819px 슬라이드 3개와 그 사이 여백 10px씩 = 2477px */
+  width: calc(819px * 3 + 20px);
+  height: 553px;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  margin-left: calc((819px * 3 + 20px) / -2);
+}
+/*.notice .promotion .swiper-slide {
+  position: relative;
+  opacity: .5;
+  transition: opacity 1s;
+}*/
+.notice .promotion .swiper-slide .swiper-image {
+  width: 819px;
+  height: 450px;
+}
+.notice .promotion .swiper-slide-active {
+  opacity: 1;
+}
+.notice .promotion .swiper-slide .btn {
+  /*width: 130px;*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.notice .promotion .swiper-pagination {
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+.notice .promotion .swiper-pagination .swiper-pagination-bullet {
+  background-color: transparent;
+  background-image: url("../img/promotion_slide_pager.png");
+  width: 13px;
+  height: 12px;
+  margin-right: 6px;
+  outline: none;
+}
+.notice .promotion .swiper-pagination .swiper-pagination-bullet:last-child {
+  margin-right: 0;
+}
+.notice .promotion .swiper-pagination .swiper-pagination-bullet-active {
+  background-image: url("../img/promotion_slide_pager_on.png");
+}
+.notice .promotion .swiper-prev,
+.notice .promotion .swiper-next {
+  width: 42px;
+  height: 42px;
+  outline: none;
+  border: 2px solid #333;
+  border-radius: 50%;
+  position: absolute;
+  /* Swiper Container 높이의 절반만큼 끌어올림 */
+  /* 버튼 높이의 절반만큼 추가로 끌어올림 */
+  top: 300px;
+  z-index: 1;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .4s;
+}
+.notice .promotion .swiper-prev {
+  left: 50%;
+  margin-left: -480px;
+}
+.notice .promotion .swiper-next {
+  right: 50%;
+  margin-right: -480px;
+}
+.notice .promotion .swiper-prev:hover,
+.notice .promotion .swiper-next:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/* 영화 리스트 */
+.movie {padding: 30px 0;}
+.movie_chart {height: 1392px;}
+.movie_chart > div {height: 700px;}
+.movie_chart > div {overflow: hidden;}
+.movie_chart > div > div {float: left; width: 292px; height: 892px; margin-right: 18px;}
+.movie_chart > div > div:last-child {margin-right: 0;}
+.movie_chart > div > div .poster {position: relative;}
+.movie_chart > div > div .poster img {border-radius:5%; display: block;}
+.movie_chart > div > div .poster .movie_poster {height: 432px; width: 291.98px;}
+.movie_chart > div > div .poster .rank {position: absolute; top: 17px; left: 0; width: 50px; height: 50px; font-size: 22px; box-shadow: 3px 3px 8px rgba(0,0,0,0.5); line-height: 50px; background-color: #3b863b; text-align: center;}
+.movie_chart > div > div .poster .rank strong {color: #fff; text-shadow: 2px 2px 3px rgba(0,0,0,1);}
+.movie_chart > div > div .poster .mx {position: absolute; top: 17px; right: 17px;}
+.movie_chart > div > div .poster .mx span {width: 103px; height: 25px; display: block;}
+.movie_chart > div > div .poster .mx .m {background-position: 0 -75px;}
+.movie_chart > div > div .poster .mx .b {background-position: 0 -100px;}
+.movie_chart > div > div .infor {background: #fff; padding: 17px; border: 1px solid #d9d9d9;}
+.movie_chart > div > div .infor h3 {color: #333; font-size: 30px; font-weight: 700; margin-bottom: 20px;}
+.movie_chart > div > div .infor h3 span {width: 29px; height: 29px; display: inline-block; margin-top: 9px; vertical-align: -2px;}
+.movie_chart > div > div .infor h3 span.all {background-position: -87px -125px;}
+.movie_chart > div > div .infor h3 span.a12 {background-position: -58px -125px;}
+.movie_chart > div > div .infor h3 span.a15 {background-position: 0px -125px;}
+.movie_chart > div > div .infor h3 span.a19 {background-position: -29px -125px;}
+.movie_chart > div > div .infor .infor_btn a {border-radius:10%; display: inline-block; background: #f2f2f2; font-size: 18px; padding: 12px 24px; margin: 4px}
