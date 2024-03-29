@@ -24,7 +24,7 @@ const Footer = () => {
             <span>개발자 번호 010-XXXX-XXXX</span>
             <span>(주)인공지능 그랜드 ICT</span>
             <span>TEL : 051) XXX-XXXX / FAX : 051) XXX-XXXX</span>
-            <span>개인정보 책임자 : 조성현</span>
+            <span>웹 사이트 책임자 : 조성현</span>
           </div>
           <p class="copyright">
             &copy; <span class="this-year"></span> (C) SILLA UNIVERSITY All rights Reserved.
