@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Header from './components/header/Header'
 import Visual from './components/section/Visual'
 import Notice from './components/section/Notice'
@@ -7,13 +7,13 @@ import Footer from './components/footer/Footer'
 
 const App = () => {
   return (
-    <>
+    <Fragment>
       <Header />
       <Visual/>
       <Notice/>
       <MovieList/>
       <Footer/>
-    </>
+    </Fragment>
   )
 }
 
