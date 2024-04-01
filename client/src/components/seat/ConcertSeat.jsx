@@ -45,7 +45,7 @@ const BuyButton = styled.button`
   border: none;
 `;
 
-const ConcertSeat = ({ handleClose }) => {
+const ConcertSeat = ({ concertName ,handleClose }) => {
   const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -53,9 +53,9 @@ const ConcertSeat = ({ handleClose }) => {
     const rowSeat = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const colSeat = ["1", "2", "3", "4", "5", "6", "7", "8"];
     const newSeat = rowSeat[row] + colSeat[col];
-  
+
     const isExisting = selectedSeats.some(seat => seat === newSeat);
-  
+
     if (!isExisting) {
       setSelectedSeats(prevSelectedSeats => [...prevSelectedSeats, newSeat]);
     } else {
@@ -64,9 +64,18 @@ const ConcertSeat = ({ handleClose }) => {
   };
 
   // 스마트계약에서 수정 필요
-  const sellTicket = () => {
-    alert(selectedSeats.length * 15000 + "원이 정상적으로 결제되었습니다.")
-    handleClose()
+  const sellTicket = (ticket) => {
+    const now = new Date();
+    if (ticket == 0) {
+      alert("좌석을 선택하여 주싶시오.")
+    } else {
+      alert(ticket * 15000 + "원이 정상적으로 결제되었습니다.")
+      console.log("좌석: ", selectedSeats)
+      console.log("구매 시간: ", now)
+      console.log("구매자: 조성현")
+      console.log("결제 금액: ", ticket * 15000 + "원")
+      handleClose()
+    }
   }
 
   useEffect(() => {
@@ -75,7 +84,7 @@ const ConcertSeat = ({ handleClose }) => {
   return ReactDOM.createPortal(
     <StyledBackground>
       <StyledContainer>
-        <Title>공연 좌석 선택</Title>
+        <Title>{concertName} 좌석 선택</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {seats.map((row, rowIndex) => (
             <div key={rowIndex} style={{ display: 'flex', flexDirection: 'row' }}>
@@ -93,7 +102,7 @@ const ConcertSeat = ({ handleClose }) => {
           ))}
         </div>
         <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length * 15000}원</h3>
-        <BuyButton onClick={sellTicket}>구매</BuyButton>
+        <BuyButton onClick={() => sellTicket(selectedSeats.length)}>구매</BuyButton>
       </StyledContainer>
     </StyledBackground>,
     document.getElementById('seat')

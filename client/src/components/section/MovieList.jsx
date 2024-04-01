@@ -35,9 +35,11 @@ const moreMovies = [
 
 const MovieList = () => {
   const [showConcertSeat, setShowConcertSeat] = useState(false);
+  const [concertName, setConcertName] = useState('')
 
-  const handleReserveClick = () => {
+  const handleReserveClick = (name) => {
     setShowConcertSeat(true);
+    setConcertName(name)
   };
 
   const handleReserveUnClick = () => {
@@ -62,7 +64,7 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={handleReserveClick}>예매하기</button> 
+                          <button onClick={() => handleReserveClick(movie.title)}>예매하기</button> 
                         </div>
                       </div>
                     </div>
@@ -78,7 +80,7 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={handleReserveClick}>예매하기</button>
+                          <button onClick={() => handleReserveClick(movie.title)}>예매하기</button>
                         </div>
                       </div>
                     </div>
@@ -89,7 +91,7 @@ const MovieList = () => {
           </div>
         </div>
       </section>
-      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} />}
+      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} concertName={concertName} />}
     </MovieWapper>
   );
 };
