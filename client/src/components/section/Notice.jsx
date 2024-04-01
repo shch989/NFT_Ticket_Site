@@ -19,7 +19,7 @@ const Notice = () => {
 
   return (
     <section class="notice">
-      <div class="movie-text">현재 진행중인 공연</div>
+      <div class="movie-text">마감 임박 공연</div>
       <div class="promotion">
         <Swiper
           modules={[Navigation, Pagination]}

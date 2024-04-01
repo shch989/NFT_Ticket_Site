@@ -15,7 +15,7 @@ const StyledBackground = styled.div`
 
 const StyledContainer = styled(Container)`
   height: 60%;
-  width: 80%;
+  width: auto;
   max-height: 800px;
   max-width: 1500px;
   background-color: #efefee;
@@ -44,8 +44,15 @@ const BuyButton = styled.button`
   font-size: 25px;
   border: none;
 `;
+const BackButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  font-size: 25px;
+  border: none;
+`;
 
-const ConcertSeat = ({ concertName ,handleClose }) => {
+const ConcertSeat = ({ concertName, handleClose }) => {
   const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -66,7 +73,7 @@ const ConcertSeat = ({ concertName ,handleClose }) => {
   // 스마트계약에서 수정 필요
   const sellTicket = (ticket) => {
     const now = new Date();
-    if (ticket == 0) {
+    if (ticket <= 0) {
       alert("좌석을 선택하여 주싶시오.")
     } else {
       alert(ticket * 15000 + "원이 정상적으로 결제되었습니다.")
@@ -102,7 +109,7 @@ const ConcertSeat = ({ concertName ,handleClose }) => {
           ))}
         </div>
         <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length * 15000}원</h3>
-        <BuyButton onClick={() => sellTicket(selectedSeats.length)}>구매</BuyButton>
+        {selectedSeats.length > 0 ? <BuyButton onClick={() => sellTicket(selectedSeats.length)}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
       </StyledContainer>
     </StyledBackground>,
     document.getElementById('seat')
