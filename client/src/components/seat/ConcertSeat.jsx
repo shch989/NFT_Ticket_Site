@@ -79,7 +79,7 @@ const ConcertSeat = ({ concertName, handleClose }) => {
       alert(ticket * 15000 + "원이 정상적으로 결제되었습니다.")
       console.log("좌석: ", selectedSeats)
       console.log("구매 시간: ", now)
-      console.log("구매자: 조성현")
+      console.log("구매자: User")
       console.log("결제 금액: ", ticket * 15000 + "원")
       handleClose()
     }
