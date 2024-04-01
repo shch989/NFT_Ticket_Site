@@ -258,4 +258,4 @@
 .movie_chart > div > div .infor h3 span.a12 {background-position: -58px -125px;}
 .movie_chart > div > div .infor h3 span.a15 {background-position: 0px -125px;}
 .movie_chart > div > div .infor h3 span.a19 {background-position: -29px -125px;}
-.movie_chart > div > div .infor .infor_btn a {border-radius:10%; display: inline-block; background: #f2f2f2; font-size: 18px; padding: 12px 24px; margin: 4px}
+.movie_chart > div > div .infor .infor_btn button {border-radius:10%; display: inline-block; background: #f2f2f2; font-size: 15px; padding: 10px 20px; margin: 4px; border-color: beige;}

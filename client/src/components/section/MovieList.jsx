@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 // css
 import '../../styles/common.css'
@@ -12,13 +12,15 @@ import movie5 from '../../img/poster05.jpg'
 import movie6 from '../../img/poster06.jpg'
 import movie7 from '../../img/poster07.jpg'
 import movie8 from '../../img/poster08.jpg'
+//components
+import ConcertSeat from '../seat/ConcertSeat'
 
 const MovieWapper = styled.div`
   margin-top: 50px;
-`
+`;
 
 const movies = [
-  { title: '인퍼머스', image: movie1 },
+  { title: '침묵', image: movie1 },
   { title: '신세계', image: movie2 },
   { title: '마스터', image: movie3 },
   { title: '마약왕', image: movie4 },
@@ -32,6 +34,16 @@ const moreMovies = [
 ];
 
 const MovieList = () => {
+  const [showConcertSeat, setShowConcertSeat] = useState(false);
+
+  const handleReserveClick = () => {
+    setShowConcertSeat(true);
+  };
+
+  const handleReserveUnClick = () => {
+    setShowConcertSeat(false);
+  };
+
   return (
     <MovieWapper>
       <section id="movie">
@@ -49,8 +61,8 @@ const MovieList = () => {
                       <div className="infor">
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
-                          <a href="/" target="_blank">상세보기</a>
-                          <a href="/" target="_blank">예매하기</a>
+                          <button>상세보기</button>
+                          <button onClick={handleReserveClick}>예매하기</button> 
                         </div>
                       </div>
                     </div>
@@ -65,8 +77,8 @@ const MovieList = () => {
                       <div className="infor">
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
-                          <a href="/" target="_blank">상세보기</a>
-                          <a href="/" target="_blank">예매하기</a>
+                          <button>상세보기</button>
+                          <button onClick={handleReserveClick}>예매하기</button>
                         </div>
                       </div>
                     </div>
@@ -77,8 +89,9 @@ const MovieList = () => {
           </div>
         </div>
       </section>
+      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} />}
     </MovieWapper>
-  )
-}
+  );
+};
 
-export default MovieList
+export default MovieList;

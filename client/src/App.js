@@ -4,6 +4,7 @@ import Visual from './components/section/Visual'
 import Notice from './components/section/Notice'
 import MovieList from './components/section/MovieList'
 import Footer from './components/footer/Footer'
+import ConcertSeat from './components/seat/ConcertSeat'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <Visual/>
       <Notice/>
       <MovieList/>
+      {/*<ConcertSeat/>*/}
       <Footer/>
     </Fragment>
   )

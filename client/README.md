@@ -20,3 +20,11 @@ npm install swiper
 ```
 npm install gsap
 ```
+## Web3.js
+```
+npm install web3
+```
+## Bootstrap
+```
+npm install react-bootstrap
+```
