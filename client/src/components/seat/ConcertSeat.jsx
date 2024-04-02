@@ -55,6 +55,7 @@ const BackButton = styled.button`
 const ConcertSeat = ({ concertName, handleClose }) => {
   const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [userIp, setUserIp] = useState('')
 
   const addSeatHandler = (row, col) => {
     const rowSeat = ["A", "B", "C", "D", "E", "F", "G", "H"];
@@ -81,12 +82,22 @@ const ConcertSeat = ({ concertName, handleClose }) => {
       console.log("좌석: ", selectedSeats)
       console.log("구매 시간: ", now)
       console.log("구매자: User")
+      console.log("구매자 IP: ", userIp)
       console.log("결제 금액: ", ticket * 15000 + "원")
       handleClose()
     }
   }
 
   useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        const userIP = data.ip;
+        setUserIp(userIP);
+      })
+      .catch(error => {
+        console.error('IP 주소를 가져오는 데 문제가 발생했습니다:', error);
+      });
   }, []);
 
   return ReactDOM.createPortal(
