@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Button } from 'react-bootstrap';
 import styled from 'styled-components';
+import TicketNFT from '../../abis/TicketNFT.json';
+import Web3 from 'web3';
 
 const StyledBackground = styled.div`
   height: 100%;
@@ -55,7 +57,39 @@ const BackButton = styled.button`
 const ConcertSeat = ({ concertName, handleClose }) => {
   const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [userIp, setUserIp] = useState('')
+  const [userIp, setUserIp] = useState('');
+  const [ticketContract, setTicketContract] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadTicketContract = async () => {
+      try {
+        if (window.ethereum) {
+          const web3 = new Web3(window.ethereum);
+
+          // MetaMask에게 사용자 계정 요청
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+          const ticketNFTAbi = TicketNFT.abi;
+          const networkId = await web3.eth.net.getId();
+          const ticketNFTNetworkData = TicketNFT.networks[networkId];
+          if (!ticketNFTNetworkData) {
+            throw new Error('TicketNFT 스마트 계약이 현재 네트워크에 배포되지 않았습니다.');
+          }
+          const ticketNFTAddress = ticketNFTNetworkData.address;
+
+          const ticketContract = new web3.eth.Contract(ticketNFTAbi, ticketNFTAddress);
+          setTicketContract(ticketContract);
+        } else {
+          throw new Error('MetaMask가 설치되지 않았거나 활성화되어 있지 않습니다.');
+        }
+      } catch (error) {
+        console.error('스마트 계약을 불러오는 도중 오류가 발생했습니다:', error);
+      }
+    };
+
+    loadTicketContract();
+  }, []);
 
   const addSeatHandler = (row, col) => {
     const rowSeat = ["A", "B", "C", "D", "E", "F", "G", "H"];
@@ -71,22 +105,41 @@ const ConcertSeat = ({ concertName, handleClose }) => {
     }
   };
 
-  // 스마트계약에서 수정 필요
-  const sellTicket = (ticket, concertName) => {
+  const sellTicket = async () => {
+    const ticket = selectedSeats.length;
     const now = new Date();
+    
     if (ticket <= 0) {
-      alert("좌석을 선택하여 주싶시오.")
-    } else {
-      alert(ticket * 15000 + "원이 정상적으로 결제되었습니다.")
-      console.log("공연 명: ", concertName)
-      console.log("좌석: ", selectedSeats)
-      console.log("구매 시간: ", now)
-      console.log("구매자: User")
-      console.log("구매자 IP: ", userIp)
-      console.log("결제 금액: ", ticket * 15000 + "원")
-      handleClose()
+      alert("좌석을 선택하여 주싶시오.");
+      return;
     }
-  }
+
+    try {
+      setLoading(true);
+
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const userAddress = accounts[0];
+
+      await ticketContract.methods.mint(
+        userAddress, concertName, ticket, selectedSeats, ticket * 15000
+      ).send({ from: userAddress });
+
+      alert(`${ticket * 15000}원이 정상적으로 결제되었습니다.`);
+      console.log("공연 명: ", concertName);
+      console.log("좌석: ", selectedSeats);
+      console.log("구매 시간: ", now);
+      console.log("구매자: ", userAddress);
+      console.log("구매자 IP: ", userIp);
+      console.log("결제 금액: ", `${ticket * 15000}원`);
+      console.log("티켓ID", ticket)
+      handleClose();
+    } catch (error) {
+      console.error("에러 발생:", error);
+      alert("트랜잭션을 처리하는 동안 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetch('https://api.ipify.org?format=json')
@@ -103,7 +156,7 @@ const ConcertSeat = ({ concertName, handleClose }) => {
   return ReactDOM.createPortal(
     <StyledBackground>
       <StyledContainer>
-        <Title>{concertName} 좌석 선택</Title>
+        <Title>"{concertName}" 좌석 선택</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {seats.map((row, rowIndex) => (
             <div key={rowIndex} style={{ display: 'flex', flexDirection: 'row' }}>
@@ -121,7 +174,7 @@ const ConcertSeat = ({ concertName, handleClose }) => {
           ))}
         </div>
         <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length * 15000}원</h3>
-        {selectedSeats.length > 0 ? <BuyButton onClick={() => sellTicket(selectedSeats.length, concertName)}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
+        {selectedSeats.length > 0 ? <BuyButton onClick={sellTicket} disabled={loading}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
       </StyledContainer>
     </StyledBackground>,
     document.getElementById('seat')

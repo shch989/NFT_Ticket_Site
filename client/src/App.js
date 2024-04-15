@@ -1,22 +1,20 @@
-import React, { Fragment } from 'react'
-import Header from './components/header/Header'
-import Visual from './components/section/Visual'
-import Notice from './components/section/Notice'
-import MovieList from './components/section/MovieList'
-import Footer from './components/footer/Footer'
-import ConcertSeat from './components/seat/ConcertSeat'
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import HomePage from './pages/HomePage';
+import QueryTicket from './pages/QueryTicket';
 
 const App = () => {
   return (
-    <Fragment>
-      <Header />
-      <Visual/>
-      <Notice/>
-      <MovieList/>
-      {/*<ConcertSeat/>*/}
-      <Footer/>
-    </Fragment>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/query" element={<QueryTicket />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
