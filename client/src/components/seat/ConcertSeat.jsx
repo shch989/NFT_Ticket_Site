@@ -106,32 +106,36 @@ const ConcertSeat = ({ concertName, handleClose }) => {
   };
 
   const sellTicket = async () => {
-    const ticket = selectedSeats.length;
+    const ticketCount = selectedSeats.length;
     const now = new Date();
     
-    if (ticket <= 0) {
-      alert("좌석을 선택하여 주싶시오.");
+    if (ticketCount <= 0) {
+      alert("좌석을 선택하여 주십시오.");
       return;
     }
-
+  
     try {
       setLoading(true);
-
+  
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const userAddress = accounts[0];
-
-      await ticketContract.methods.mint(
-        userAddress, concertName, ticket, selectedSeats, ticket * 15000
+  
+      // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
+      const tokenId = await ticketContract.methods.mint(
+        userAddress, concertName, selectedSeats, ticketCount * 15000
       ).send({ from: userAddress });
-
-      alert(`${ticket * 15000}원이 정상적으로 결제되었습니다.`);
+  
+      // 콘솔에 토큰 ID 출력
+      console.log("새로 발행된 티켓의 토큰 ID:", tokenId);
+  
+      alert(`${ticketCount * 15000}원이 정상적으로 결제되었습니다.`);
       console.log("공연 명: ", concertName);
       console.log("좌석: ", selectedSeats);
       console.log("구매 시간: ", now);
       console.log("구매자: ", userAddress);
       console.log("구매자 IP: ", userIp);
-      console.log("결제 금액: ", `${ticket * 15000}원`);
-      console.log("티켓ID", ticket)
+      console.log("결제 금액: ", `${ticketCount * 15000}원`);
+      console.log("티켓 수량: ", ticketCount)
       handleClose();
     } catch (error) {
       console.error("에러 발생:", error);
