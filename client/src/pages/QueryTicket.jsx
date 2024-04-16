@@ -57,9 +57,10 @@ const QueryTicket = () => {
       // 각 토큰 ID에 대한 NFT 정보 가져오기
       const userNFTInfos = await Promise.all(tokenIds.map(async tokenId => {
         const tokenInfo = await ticketContract.methods.getTicketInfo(tokenId).call();
-        return tokenInfo;
+        return { ...tokenInfo, tokenId }; // 토큰 ID 정보를 NFT 정보에 추가
       }));
       setUserNFTs(userNFTInfos);
+      console.log(userNFTInfos)
     } catch (error) {
       console.error('NFT 정보를 가져오는 도중에 오류가 발생했습니다:', error);
     }
@@ -71,7 +72,7 @@ const QueryTicket = () => {
         <h2>사용자의 NFT 정보</h2>
         {userNFTs.map((nft, index) => (
           <div key={index} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
-            <p>티켓 ID: {index}</p>
+            <p>토큰 ID: {nft.tokenId.toString()}</p>
             <p>구매자: {nft.buyer}</p>
             <p>콘서트: {nft.concert}</p>
             <p>구매 시간: {new Date(Number(nft.purchaseTime) * 1000).toLocaleString()}</p>

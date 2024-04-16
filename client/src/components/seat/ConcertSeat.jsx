@@ -60,6 +60,7 @@ const ConcertSeat = ({ concertName, handleClose }) => {
   const [userIp, setUserIp] = useState('');
   const [ticketContract, setTicketContract] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [ticketId, setTicketId] = useState(null); // 토큰 ID 추가
 
   useEffect(() => {
     const loadTicketContract = async () => {
@@ -121,12 +122,11 @@ const ConcertSeat = ({ concertName, handleClose }) => {
       const userAddress = accounts[0];
   
       // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
-      const tokenId = await ticketContract.methods.mint(
+      const receipt = await ticketContract.methods.mint(
         userAddress, concertName, selectedSeats, ticketCount * 15000
       ).send({ from: userAddress });
   
-      // 콘솔에 토큰 ID 출력
-      console.log("새로 발행된 티켓의 토큰 ID:", tokenId);
+      const tokenId = receipt.events.Transfer.returnValues.tokenId.toString(); // 토큰 아이디
   
       alert(`${ticketCount * 15000}원이 정상적으로 결제되었습니다.`);
       console.log("공연 명: ", concertName);
@@ -135,7 +135,8 @@ const ConcertSeat = ({ concertName, handleClose }) => {
       console.log("구매자: ", userAddress);
       console.log("구매자 IP: ", userIp);
       console.log("결제 금액: ", `${ticketCount * 15000}원`);
-      console.log("티켓 수량: ", ticketCount)
+      console.log("티켓 수량: ", ticketCount);
+      console.log("티켓 아이디: ", tokenId); // 이 부분 추가
       handleClose();
     } catch (error) {
       console.error("에러 발생:", error);
@@ -179,6 +180,11 @@ const ConcertSeat = ({ concertName, handleClose }) => {
         </div>
         <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length * 15000}원</h3>
         {selectedSeats.length > 0 ? <BuyButton onClick={sellTicket} disabled={loading}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
+        {ticketId && ( // 토큰 ID가 존재하면 화면에 출력
+          <div>
+            <h3>토큰 ID: {ticketId}</h3>
+          </div>
+        )}
       </StyledContainer>
     </StyledBackground>,
     document.getElementById('seat')
