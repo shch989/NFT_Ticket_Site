@@ -55,7 +55,6 @@ const BackButton = styled.button`
 `;
 
 const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, concertPrice }) => {
-  const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [userIp, setUserIp] = useState('');
   const [ticketContract, setTicketContract] = useState(null);
@@ -171,12 +170,12 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
       <StyledContainer>
         <Title>"{concertName}" 좌석 선택</Title>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {seats.map((row, rowIndex) => (
+          {new Array(8).fill(0).map((_, rowIndex) => (
             <div key={rowIndex} style={{ display: 'flex', flexDirection: 'row' }}>
-              {row.map((seat, colIndex) => (
+              {new Array(8).fill(0).map((_, colIndex) => (
                 <Button
                   key={`${rowIndex}-${colIndex}`}
-                  variant={seats[rowIndex][colIndex] ? 'danger' : 'success'}
+                  variant={selectedSeats.includes(`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`) ? 'danger' : 'success'}
                   onClick={() => addSeatHandler(rowIndex, colIndex)}
                   style={{ margin: '5px' }}
                 >

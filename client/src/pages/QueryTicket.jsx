@@ -2,7 +2,18 @@ import React, { useState, useEffect, Fragment } from 'react';
 import TicketNFT from '../abis/TicketNFT.json'; // TicketNFT 컨트랙트 ABI JSON 파일
 import Web3 from 'web3';
 import TicketCard from './TicketCard';
-import Header from '../components/header/Header.jsx'
+import styled from 'styled-components';
+import NavBar from '../components/navbar/NavBar';
+
+const TicketListContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const Heading = styled.h1`
+  text-align: center;
+`;
 
 const QueryTicket = () => {
   const [web3, setWeb3] = useState(null);
@@ -70,13 +81,14 @@ const QueryTicket = () => {
 
   return (
     <Fragment>
-      <Header />
-      <br />
       <div>
-        <h2>사용자 NFT티켓 목록</h2>
-        {userNFTs.map((nft, index) => (
-          <TicketCard key={index} nft={nft} />
-        ))}
+        <NavBar/>
+        <Heading>나의 NFT티켓 목록</Heading>
+        <TicketListContainer>
+          {userNFTs.map((nft, index) => (
+            <TicketCard key={index} nft={nft} />
+          ))}
+        </TicketListContainer>
       </div>
     </Fragment>
   );

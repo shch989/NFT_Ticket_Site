@@ -14,6 +14,7 @@ const TicketDate = styled.div`
   border-style: solid solid dashed solid;
   padding: 10px 121.7px;
   width: 380px;
+  height: 50px;
 `
 
 const TicketContainer = styled.div`

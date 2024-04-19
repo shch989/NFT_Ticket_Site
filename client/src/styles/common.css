@@ -103,7 +103,7 @@ img {
 
 /* 레이아웃 */
 #mNav {display: none; position: absolute; top: 10px; right: 14px;}
-#header {width: 100%; border-bottom: 1px solid #c6c6c6;}
+/*#header {width: 100%; border-bottom: 1px solid #c6c6c6;}*/
 #banner {position: relative;}
 
 /* 가운데 영역 */
@@ -113,14 +113,14 @@ img {
 .row {padding: 0 28px; height: 100%;}
 
 
-/* 헤더 영역 */
+/*헤더 영역
 .header h1 {float: left;}
 .header h1 em {padding: 5px 8px 5px 0; display: inline-block;}
 .header h1 em img {width: 110px; height: 45px;}
 .header .nav {float: right;}
 .header .nav ul {border-left: 1px solid #c6c6c6}
 .header .nav ul li {float: left; width: 103px; text-align: center; border-right: 1px solid #c6c6c6; list-style-type: none;}
-.header .nav ul li a {display: block; padding: 19px 10px; font-size: 17px; font-weight: 700; color: #444;}
+.header .nav ul li a {display: block; padding: 19px 10px; font-size: 17px; font-weight: 700; color: #444;}*/
 
 /*FOOTER*/
 footer {

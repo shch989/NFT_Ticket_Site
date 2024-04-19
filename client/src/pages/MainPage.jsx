@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import Header from '../components/header/Header';
 import Visual from '../components/section/Visual';
 import Notice from '../components/section/Notice';
 import MovieList from '../components/section/MovieList';
 import Footer from '../components/footer/Footer';
+import NavBar from '../components/navbar/NavBar';
 
 const MainPage = () => {
   // 테스트용
@@ -17,7 +17,7 @@ const MainPage = () => {
 
   return (
     <Fragment>
-      <Header />
+      <NavBar/>
       <Visual />
       <Notice />
       <MovieList />
