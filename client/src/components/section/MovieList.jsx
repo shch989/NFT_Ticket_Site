@@ -20,26 +20,33 @@ const MovieWapper = styled.div`
 `;
 
 const movies = [
-  { title: '침묵', image: movie1 },
-  { title: '신세계', image: movie2 },
-  { title: '마스터', image: movie3 },
-  { title: '마약왕', image: movie4 },
+  { title: '침묵', image: movie1, date: '2024년 10월 15일', time: "10:15", price: 15000 },
+  { title: '신세계', image: movie2, date: '2024년 9월 5일', time: "13:15", price: 16000 },
+  { title: '마스터', image: movie3, date: '2024년 11월 19일', time: "16:15", price: 15500 },
+  { title: '마약왕', image: movie4, date: '2024년 10월 10일', time: "19:15", price: 18000 },
 ];
 
 const moreMovies = [
-  { title: '범죄도시2', image: movie5 },
-  { title: '괴물', image: movie6 },
-  { title: '꼭두각시', image: movie7 },
-  { title: 'GETOUT', image: movie8 },
+  { title: '범죄도시2', image: movie5, date: '2024년 10월 1일', time: "10:15", price: 16000 },
+  { title: '괴물', image: movie6, date: '2024년 10월 9일', time: "13:15", price: 17500 },
+  { title: '꼭두각시', image: movie7, date: '2024년 9월 30일', time: "16:15", price: 16000 },
+  { title: 'GETOUT', image: movie8, date: '2024년 8월 25일', time: "19:15", price: 18000 },
 ];
 
 const MovieList = () => {
   const [showConcertSeat, setShowConcertSeat] = useState(false);
   const [concertName, setConcertName] = useState('')
+  const [concertdate, setConcertDate] = useState('')
+  const [concertTime, setConcertTime] = useState('')
+  const [concertPrice, setConcertPrice] = useState(0)
 
-  const handleReserveClick = (name) => {
+
+  const handleReserveClick = (name, date, time, price) => {
     setShowConcertSeat(true);
     setConcertName(name)
+    setConcertDate(date)
+    setConcertTime(time)
+    setConcertPrice(price)
   };
 
   const handleReserveUnClick = () => {
@@ -64,7 +71,7 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={() => handleReserveClick(movie.title)}>예매하기</button> 
+                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price)}>예매하기</button>
                         </div>
                       </div>
                     </div>
@@ -80,7 +87,7 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={() => handleReserveClick(movie.title)}>예매하기</button>
+                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price)}>예매하기</button>
                         </div>
                       </div>
                     </div>
@@ -91,7 +98,7 @@ const MovieList = () => {
           </div>
         </div>
       </section>
-      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} concertName={concertName} />}
+      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} concertName={concertName} concertDate={concertdate} concertTime={concertTime} concertPrice={concertPrice} />}
     </MovieWapper>
   );
 };

@@ -54,13 +54,13 @@ const BackButton = styled.button`
   border: none;
 `;
 
-const ConcertSeat = ({ concertName, handleClose }) => {
+const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, concertPrice }) => {
   const [seats, setSeats] = useState(new Array(8).fill(new Array(8).fill(false)));
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [userIp, setUserIp] = useState('');
   const [ticketContract, setTicketContract] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [ticketId, setTicketId] = useState(null); // 토큰 ID 추가
+  const [ticketId, setTicketId] = useState(null);
 
   useEffect(() => {
     const loadTicketContract = async () => {
@@ -109,7 +109,12 @@ const ConcertSeat = ({ concertName, handleClose }) => {
   const sellTicket = async () => {
     const ticketCount = selectedSeats.length;
     const now = new Date();
-    
+  
+    if (ticketCount > 4) {
+      alert("티켓은 최대 4장까지만 구매할 수 있습니다.");
+      return;
+    }
+  
     if (ticketCount <= 0) {
       alert("좌석을 선택하여 주십시오.");
       return;
@@ -123,28 +128,31 @@ const ConcertSeat = ({ concertName, handleClose }) => {
   
       // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
       const receipt = await ticketContract.methods.mint(
-        userAddress, concertName, selectedSeats, ticketCount * 15000
+        userAddress, concertName, concertDate, concertTime, selectedSeats, ticketCount * concertPrice
       ).send({ from: userAddress });
   
       const tokenId = receipt.events.Transfer.returnValues.tokenId.toString(); // 토큰 아이디
   
-      alert(`${ticketCount * 15000}원이 정상적으로 결제되었습니다.`);
+      alert(`${ticketCount * concertPrice}원이 정상적으로 결제되었습니다.`);
       console.log("공연 명: ", concertName);
+      console.log("공연 날짜: ", concertDate);
+      console.log("공연 시간: ", concertTime);
       console.log("좌석: ", selectedSeats);
       console.log("구매 시간: ", now);
       console.log("구매자: ", userAddress);
       console.log("구매자 IP: ", userIp);
-      console.log("결제 금액: ", `${ticketCount * 15000}원`);
+      console.log("결제 금액: ", `${ticketCount * concertPrice}원`);
       console.log("티켓 수량: ", ticketCount);
       console.log("티켓 아이디: ", tokenId); // 이 부분 추가
       handleClose();
     } catch (error) {
       console.error("에러 발생:", error);
-      alert("트랜잭션을 처리하는 동안 오류가 발생했습니다.");
+      alert("거래가 중지되었습니다.");
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetch('https://api.ipify.org?format=json')
@@ -178,7 +186,7 @@ const ConcertSeat = ({ concertName, handleClose }) => {
             </div>
           ))}
         </div>
-        <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length * 15000}원</h3>
+        <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length *  concertPrice }원</h3>
         {selectedSeats.length > 0 ? <BuyButton onClick={sellTicket} disabled={loading}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
         {ticketId && ( // 토큰 ID가 존재하면 화면에 출력
           <div>

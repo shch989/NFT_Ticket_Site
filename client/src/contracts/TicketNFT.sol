@@ -10,9 +10,11 @@ contract TicketNFT is ERC721Enumerable {
     struct Purchase {
         address buyer; // 구매자의 주소
         string concert; // 콘서트 이름
+        string concertDate; // 콘서트 날짜
+        string concertTime; // 콘서트 시간
         uint256 purchaseTime; // 구매 시간
         string[] selectedSeats; // 선택된 좌석 목록
-        uint256 paymentAmount; // 결제 금액
+        uint256 paymentAmount; // 총 결제 금액
     }
 
     // 토큰 ID에 해당하는 티켓 구매 정보를 저장하는 배열
@@ -28,6 +30,8 @@ contract TicketNFT is ERC721Enumerable {
     function mint(
         address _to, // 발행할 티켓의 수령 주소
         string memory _concert, // 콘서트 이름
+        string memory _concertDate, // 콘서트 날짜
+        string memory _concertTime, // 콘서트 시간
         string[] memory _selectedSeats, // 선택된 좌석 목록
         uint256 _paymentAmount // 결제 금액
     ) external returns (uint256) {
@@ -38,6 +42,8 @@ contract TicketNFT is ERC721Enumerable {
         Purchase memory newPurchase = Purchase({
             buyer: _to,
             concert: _concert,
+            concertDate: _concertDate,
+            concertTime: _concertTime,
             purchaseTime: block.timestamp,
             selectedSeats: _selectedSeats,
             paymentAmount: _paymentAmount
