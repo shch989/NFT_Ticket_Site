@@ -88,6 +88,9 @@ const NavBar = () => {
         <NavLink to="/query" isActive={pathname === '/query'}>
           MyTicket
         </NavLink>
+        <NavLink to="/transfer" isActive={pathname === '/transfer'}>
+          Transfer
+        </NavLink>
       </NavLinksWrapper>
       <UserIdWrapper>Wallet ID: {walletAddress}</UserIdWrapper>
     </NavbarContainer>

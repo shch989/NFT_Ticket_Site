@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage';
 import HomePage from './pages/HomePage';
 import QueryTicket from './pages/QueryTicket';
 import TicketCard from './pages/TicketCard';
+import TicketTransferPage from './pages/TicketTransferPage';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/main" element={<MainPage />} />
         <Route path="/query" element={<QueryTicket />} />
         <Route path="/ticket" element={<TicketCard />} />
+        <Route path="/transfer" element={<TicketTransferPage />} />
       </Routes>
     </Router>
   );

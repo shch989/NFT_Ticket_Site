@@ -1,15 +1,14 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import TicketNFT from '../abis/TicketNFT.json'; // TicketNFT 컨트랙트 ABI JSON 파일
 import Web3 from 'web3';
-import TicketCard from './TicketCard';
 import styled from 'styled-components';
 import NavBar from '../components/navbar/NavBar';
 import Footer from '../components/footer/Footer';
 
-const TicketListContainer = styled.div`
+const TransferForm = styled.form`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Heading = styled.h1`
@@ -21,11 +20,47 @@ const QueryTicketMain = styled.div`
   min-height: 62vh;
 `
 
-const QueryTicket = () => {
+const TransferButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: transparent; /* 투명한 배경색 */
+  border: 2px solid #ccc; /* 테두리 스타일 */
+  border-radius: 5px;
+  font-weight: bold;
+  color: #333; /* 텍스트 색상 */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* hover 시에 색상 변경을 위한 transition 효과 */
+  
+  &:hover {
+    background-color: #333; /* hover 시 배경색 변경 */
+    color: #fff; /* hover 시 텍스트 색상 변경 */
+  }
+`;
+
+const InputLabel = styled.label`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const InputField = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+  width: 500px;
+`;
+
+const TicketTransferPage = () => {
   const [web3, setWeb3] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [ticketContract, setTicketContract] = useState(null);
-  const [userNFTs, setUserNFTs] = useState([]);
+  const [toAddress, setToAddress] = useState('');
+  const [tokenId, setTokenId] = useState('');
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -61,44 +96,48 @@ const QueryTicket = () => {
     initWeb3();
   }, []);
 
-  useEffect(() => {
-    fetchUserNFTs();
-  }, [ticketContract]); // ticketContract 상태가 변경될 때마다 NFT 정보 가져오기
-
-  const fetchUserNFTs = async () => {
-    if (!ticketContract) return;
-
+  const handleTransfer = async (e) => {
+    e.preventDefault();
     try {
-      // 현재 지갑 소유자의 모든 NFT 토큰 ID 가져오기
-      const tokenIds = await ticketContract.methods.getOwnedTicketIds(accounts[0]).call();
-      console.log('사용자의 NFT 토큰 ID 목록:', tokenIds);
-
-      // 각 토큰 ID에 대한 NFT 정보 가져오기
-      const userNFTInfos = await Promise.all(tokenIds.map(async tokenId => {
-        const tokenInfo = await ticketContract.methods.getTicketInfo(tokenId).call();
-        return { ...tokenInfo, tokenId }; // 토큰 ID 정보를 NFT 정보에 추가
-      }));
-      setUserNFTs(userNFTInfos);
-      console.log(userNFTInfos)
+      // NFT 양도 실행
+      await ticketContract.methods.transfer(toAddress, tokenId).send({ from: accounts[0] });
+      alert('NFT가 성공적으로 양도되었습니다.');
     } catch (error) {
-      console.error('NFT 정보를 가져오는 도중에 오류가 발생했습니다:', error);
+      console.error('NFT 양도 중 오류 발생:', error);
+      alert('NFT 양도 중 오류가 발생했습니다.');
     }
   };
 
   return (
     <Fragment>
-      <NavBar />
+      <NavBar/>
       <QueryTicketMain>
-        <Heading>나의 NFT 공연 티켓 목록</Heading>
-        <TicketListContainer>
-          {userNFTs.map((nft, index) => (
-            <TicketCard key={index} nft={nft} />
-          ))}
-        </TicketListContainer>
+      <Heading>NFT 티켓 양도</Heading>
+      <TransferForm onSubmit={handleTransfer}>
+        <InputLabel>
+          수령 주소:
+          <InputField
+            type="text"
+            value={toAddress}
+            onChange={(e) => setToAddress(e.target.value)}
+            required
+          />
+        </InputLabel>
+        <InputLabel>
+          티켓 ID:
+          <InputField
+            type="number"
+            value={tokenId}
+            onChange={(e) => setTokenId(e.target.value)}
+            required
+          />
+        </InputLabel>
+        <TransferButton type="submit">양도</TransferButton>
+      </TransferForm>
       </QueryTicketMain>
-      <Footer />
+      <Footer/>
     </Fragment>
   );
 };
 
-export default QueryTicket;
+export default TicketTransferPage;

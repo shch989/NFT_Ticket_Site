@@ -59,12 +59,23 @@ contract TicketNFT is ERC721Enumerable {
         return purchases[_tokenId];
     }
 
-    function getOwnedTicketIds(address _owner) external view returns (uint256[] memory) {
+    function getOwnedTicketIds(
+        address _owner
+    ) external view returns (uint256[] memory) {
         uint256 balance = balanceOf(_owner);
         uint256[] memory tokenIds = new uint256[](balance);
         for (uint256 i = 0; i < balance; i++) {
             tokenIds[i] = tokenOfOwnerByIndex(_owner, i);
         }
         return tokenIds;
+    }
+
+    // NFT 양도 함수
+    function transfer(address _to, uint256 _tokenId) external {
+        require(_exists(_tokenId), "Token does not exist");
+        address owner = ownerOf(_tokenId);
+        require(msg.sender == owner, "Not token owner");
+        require(_to != address(0), "Invalid recipient address");
+        _transfer(owner, _to, _tokenId);
     }
 }
