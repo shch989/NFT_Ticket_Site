@@ -76,7 +76,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <NavbarContainer>
+    <NavbarContainer> 
       <NavLinksWrapper>
         <NavBarImg src={DeuLogo} alt="MOVIE" />
         <NavLink to="/main" isActive={pathname === '/main'}>

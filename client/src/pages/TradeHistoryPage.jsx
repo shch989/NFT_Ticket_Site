@@ -10,8 +10,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 50px 0;
-  min-height: 62vh;
+  margin: 28px 0 50px 0;
+  min-height: 63.7vh;
 `;
 
 // 양도 이력 리스트 스타일
@@ -91,6 +91,7 @@ const TradeHistoryPage = () => {
   const [ticketContract, setTicketContract] = useState(null);
   const [tokenId, setTokenId] = useState('');
   const [tradeHistory, setTradeHistory] = useState([]);
+  const [historyOnOff, setHistoryOnOff] = useState(false)
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -132,13 +133,14 @@ const TradeHistoryPage = () => {
 
   const getTradeHistory = async () => {
     try {
-      if(tokenId == '') {
+      if (tokenId == '') {
         alert("검색할 토큰 ID 값을 입력하여 주십시오.")
-        return 
+        return
       }
       // 특정 토큰 ID에 대한 거래 이력을 불러오기
       const history = await ticketContract.methods.getTradeHistory(tokenId).call();
       setTradeHistory(history);
+      setHistoryOnOff(true)
     } catch (error) {
       console.error('거래 이력을 불러오는 중에 오류가 발생했습니다:', error);
     }
@@ -173,7 +175,7 @@ const TradeHistoryPage = () => {
           </InputLabel>
           <TransferButton onClick={getTradeHistory}>조회</TransferButton>
         </InputWrapper>
-        <div>
+        {historyOnOff && <div>
           <SubHeading>티켓 양도 이력</SubHeading>
           <TradeHistoryList>
             {tradeHistory.map((trade, index) => (
@@ -191,7 +193,7 @@ const TradeHistoryPage = () => {
               </TradeHistoryItem>
             ))}
           </TradeHistoryList>
-        </div>
+        </div>}
       </Container>
       <Footer />
     </Fragment>
