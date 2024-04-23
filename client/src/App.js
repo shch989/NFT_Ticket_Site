@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import HomePage from './pages/HomePage';
 import QueryTicket from './pages/QueryTicket';
-import TicketCard from './pages/TicketCard';
+import TicketCard from './components/UI/TicketCard';
 import TicketTransferPage from './pages/TicketTransferPage';
+import TradeHistoryPage from './pages/TradeHistoryPage';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/query" element={<QueryTicket />} />
         <Route path="/ticket" element={<TicketCard />} />
         <Route path="/transfer" element={<TicketTransferPage />} />
+        <Route path="/trade-history" element={<TradeHistoryPage />} />
       </Routes>
     </Router>
   );

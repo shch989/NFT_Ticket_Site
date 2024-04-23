@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import TicketNFT from '../abis/TicketNFT.json'; // TicketNFT 컨트랙트 ABI JSON 파일
 import Web3 from 'web3';
-import TicketCard from './TicketCard';
+import TicketCard from '../components/UI/TicketCard';
 import styled from 'styled-components';
 import NavBar from '../components/navbar/NavBar';
 import Footer from '../components/footer/Footer';

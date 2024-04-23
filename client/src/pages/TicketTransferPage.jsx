@@ -24,17 +24,17 @@ const TransferButton = styled.button`
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: transparent; /* 투명한 배경색 */
-  border: 2px solid #ccc; /* 테두리 스타일 */
+  background-color: transparent; 
+  border: 2px solid #ccc; 
   border-radius: 5px;
   font-weight: bold;
-  color: #333; /* 텍스트 색상 */
+  color: #333; 
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s; /* hover 시에 색상 변경을 위한 transition 효과 */
+  transition: background-color 0.3s, color 0.3s; 
   
   &:hover {
-    background-color: #333; /* hover 시 배경색 변경 */
-    color: #fff; /* hover 시 텍스트 색상 변경 */
+    background-color: #333; 
+    color: #fff; 
   }
 `;
 

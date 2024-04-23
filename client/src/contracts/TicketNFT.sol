@@ -49,6 +49,7 @@ contract TicketNFT is ERC721Enumerable {
             paymentAmount: _paymentAmount
         });
         purchases.push(newPurchase);
+        tradeHistories[tokenId].push(newPurchase);
         return tokenId; // 토큰 ID 반환
     }
 
@@ -70,12 +71,36 @@ contract TicketNFT is ERC721Enumerable {
         return tokenIds;
     }
 
-    // NFT 양도 함수
+    // 특정 토큰 ID에 대한 거래 이력을 저장하는 배열
+    mapping(uint256 => Purchase[]) public tradeHistories;
+
+    // NFT를 양도하는 함수
     function transfer(address _to, uint256 _tokenId) external {
         require(_exists(_tokenId), "Token does not exist");
         address owner = ownerOf(_tokenId);
         require(msg.sender == owner, "Not token owner");
         require(_to != address(0), "Invalid recipient address");
+
+        // NFT 양도
         _transfer(owner, _to, _tokenId);
+
+        // 거래 이력 추가
+        Purchase memory trade = Purchase({
+            buyer: _to,
+            concert: purchases[_tokenId].concert,
+            concertDate: purchases[_tokenId].concertDate,
+            concertTime: purchases[_tokenId].concertTime,
+            purchaseTime: block.timestamp,
+            selectedSeats: purchases[_tokenId].selectedSeats,
+            paymentAmount: purchases[_tokenId].paymentAmount
+        });
+        tradeHistories[_tokenId].push(trade);
+    }
+
+    // 특정 토큰 ID의 거래 이력 조회
+    function getTradeHistory(
+        uint256 _tokenId
+    ) external view returns (Purchase[] memory) {
+        return tradeHistories[_tokenId];
     }
 }

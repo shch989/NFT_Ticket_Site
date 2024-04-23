@@ -84,8 +84,8 @@ const TicketCard = (props) => {
     }, 1000);
 
     // 구매자의 정보를 8글자로 자르고 '...'을 붙여 표시
-    if (props.nft.buyer.length > 26) {
-      setShortenedBuyer(props.nft.buyer.slice(0, 26) + '...');
+    if (props.nft.buyer.length > 20) {
+      setShortenedBuyer(props.nft.buyer.slice(0, 20) + '...');
     } else {
       setShortenedBuyer(props.nft.buyer);
     }
@@ -115,7 +115,7 @@ const TicketCard = (props) => {
         </TicketHeader>
         <TicketMain>
           <TicketMainItem><b>좌석 :</b> {formatSeats(props.nft.selectedSeats)}</TicketMainItem>
-          <TicketMainItem><b>구매자 :</b> {shortenedBuyer}</TicketMainItem>
+          <TicketMainItem><b>최초 구매자 :</b> {shortenedBuyer}</TicketMainItem>
           <TicketMainItem><b>구매시간 :</b> {formatPurchaseTime(props.nft.purchaseTime)}</TicketMainItem>
         </TicketMain>
         <NoticeFont>혼잡하오니 공연 입장은 공연시작 15분 전에 착석하여 주시기 바랍니다.</NoticeFont>

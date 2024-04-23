@@ -79,9 +79,6 @@ const NavBar = () => {
     <NavbarContainer>
       <NavLinksWrapper>
         <NavBarImg src={DeuLogo} alt="MOVIE" />
-        <NavLink to="/" isActive={pathname === '/'}>
-          Home
-        </NavLink>
         <NavLink to="/main" isActive={pathname === '/main'}>
           Main
         </NavLink>
@@ -90,6 +87,9 @@ const NavBar = () => {
         </NavLink>
         <NavLink to="/transfer" isActive={pathname === '/transfer'}>
           Transfer
+        </NavLink>
+        <NavLink to="/trade-history" isActive={pathname === '/trade-history'}>
+          History
         </NavLink>
       </NavLinksWrapper>
       <UserIdWrapper>Wallet ID: {walletAddress}</UserIdWrapper>
