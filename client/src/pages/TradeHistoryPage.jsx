@@ -182,7 +182,7 @@ const TradeHistoryPage = () => {
               <TradeHistoryItem key={index}>
                 <TradeHistoryContent>
                   <h3>No.{index + 1}</h3>
-                  <p>구매자: {trade.buyer}</p>
+                  <p>소유자: {trade.buyer}</p>
                   <p>콘서트: {trade.concert}</p>
                   <p>콘서트 일자: {trade.concertDate}</p>
                   <p>콘서트 시간: {trade.concertTime}</p>
