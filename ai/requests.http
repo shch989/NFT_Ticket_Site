@@ -1,0 +1,42 @@
+### 테스트
+GET http://localhost:8000/
+
+### 테스트
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "User_ID": "syyKp6Sd",
+  "Transaction_Time": "2024-04-24  2:56:26 PM",
+  "Transaction_Quantity": 4,
+  "Tranaction_diff_time": 17786,
+  "Age": 50,
+  "Payment_Method": "Credit Card",
+  "Card_Type": "Credit",
+  "Card_Last4": 1015,
+  "isAnormal": "FALSE",
+  "IP_Address": "182.48.151.189",
+  "Device_Type": "Mobile",
+  "Card_Last4_count": 2,
+  "IP_Address_count": 2,
+  "IP_Transaction_diff_time": 339,
+  "Card_Transaction_diff_time": 339
+}
+
+### 테스트
+POST http://localhost:8000/predict
+Content-Type: application/json
+
+{
+  "User_ID": "syyKp6Sdf",
+  "Transaction_Time": "2024-04-24  2:56:26 PM",
+  "Transaction_Quantity": 4,
+  "Tranaction_diff_time": 17786,
+  "Age": 50,
+  "Payment_Method": "Credit Card",
+  "Card_Type": "Credit",
+  "Card_Last4": 1015,
+  "isAnormal": "FALSE",
+  "IP_Address": "182.48.151.189",
+  "Device_Type": "Mobile"
+}
