@@ -46,13 +46,19 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleConnectMetaMask = async () => {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      navigate('/main');
-    } catch (error) {
-      console.error('Failed to connect MetaMask:', error);
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            navigate('/main');
+            console.log('Connected:', accounts[0]);
+        } catch (error) {
+            console.error('Failed to connect MetaMask:', error);
+        }
+    } else {
+        console.error('MetaMask is not installed');
     }
-  };
+};
+
 
   return (
     <Container>
