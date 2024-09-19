@@ -18,7 +18,7 @@ const Heading = styled.h1`
 
 const QueryTicketMain = styled.div`
   margin: 50px 0;
-  min-height: 62.09vh;
+  min-height: 69.7vh;
 `
 
 const QueryTicket = () => {

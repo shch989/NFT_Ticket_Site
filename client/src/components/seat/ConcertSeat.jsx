@@ -1,61 +1,99 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom';
-import { Container, Button } from 'react-bootstrap';
+import axios from 'axios';
 import styled from 'styled-components';
 import TicketNFT from '../../abis/TicketNFT.json';
 import Web3 from 'web3';
 
-const StyledBackground = styled.div`
+// Styled components
+const AppContainer = styled.div`
   height: 100%;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   background-color: rgba(0,0,0,0.7);
+  color: #fff;
   z-index: 99;
   position: fixed;
   top: 0;
   left: 0;
-`
-
-const StyledContainer = styled(Container)`
-  height: 60%;
-  width: auto;
-  max-height: 800px;
-  max-width: 1500px;
-  background-color: #efefee;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  border-radius: 30px;
 `;
 
-const Title = styled.h2`
-  margin-bottom: 50px;
-  margin-top: 0;
-  font-size: 35px;
+const FormContainer = styled.div`
+  background-color: #3c3c3c;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(90, 81, 81, 0.644);
+  width: auto; /* 더 넓은 가로 크기 */
+  display: flex; /* Flexbox 사용 */
+  align-items: flex-start; /* 요소들이 위쪽에서부터 정렬 */
+  gap: 20px; /* 이미지와 양식 사이의 간격 */
 `;
 
-const BuyButton = styled.button`
-  position: absolute;
-  bottom: 20px;
-  right: 30px;
-  font-size: 25px;
+const ConcertImage = styled.img`
+  width: auto; /* 이미지의 너비 */
+  height: 700px; /* 이미지의 비율을 유지하며 높이 자동 조정 */
+  margin-top: 30px;
+  margin-right: 30px;
+  border-radius: 10px; /* 이미지 모서리를 둥글게 */
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: #fff;
+  font-size: 14px;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #444;
+  color: #fff;
+  font-size: 14px;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 15px;
   border: none;
-`;
-const BackButton = styled.button`
-  position: absolute;
-  bottom: 20px;
-  right: 30px;
-  font-size: 25px;
-  border: none;
+  border-radius: 5px;
+  background-color: #5a67d8;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #4c51bf;
+  }
 `;
 
-const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, concertPrice }) => {
-  const [selectedSeats, setSelectedSeats] = useState([]);
+const ResultContainer = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #4a4a4a;
+  border-radius: 10px;
+`;
+
+const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, concertPrice, concertImage }) => {
   const [userIp, setUserIp] = useState('');
   const [ticketContract, setTicketContract] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -91,33 +129,36 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
     loadTicketContract();
   }, []);
 
-  const addSeatHandler = (row, col) => {
-    const rowSeat = ["A", "B", "C", "D", "E", "F", "G", "H"];
-    const colSeat = ["1", "2", "3", "4", "5", "6", "7", "8"];
-    const newSeat = rowSeat[row] + colSeat[col];
+  const [formData, setFormData] = useState({
+    User_ID: '',
+    Password: '',
+    Transaction_Quantity: 1,
+    Age: '',
+    Payment_Method: '',
+    Card_Type: '',
+    Card_Number: '', // 전체 카드 번호
+    IP_Address: '182.48.151.189',
+    Device_Type: 'Mobile',
+  });
 
-    const isExisting = selectedSeats.some(seat => seat === newSeat);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
-    if (!isExisting) {
-      setSelectedSeats(prevSelectedSeats => [...prevSelectedSeats, newSeat]);
-    } else {
-      setSelectedSeats(prevSelectedSeats => prevSelectedSeats.filter(seat => seat !== newSeat));
-    }
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const sellTicket = async () => {
-    const ticketCount = selectedSeats.length;
+  const handleSubmit = async () => {
+    const currentDateTime = new Date().toISOString();
+    const diffTime = Date.now() / 1000;
+
+    // 카드번호 뒷 4자리 추출
+    const cardLast4 = formData.Card_Number.slice(-4);
+
     const now = new Date();
-  
-    if (ticketCount > 4) {
-      alert("티켓은 최대 4장까지만 구매할 수 있습니다.");
-      return;
-    }
-  
-    if (ticketCount <= 0) {
-      alert("좌석을 선택하여 주십시오.");
-      return;
-    }
   
     try {
       setLoading(true);
@@ -127,21 +168,20 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
   
       // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
       const receipt = await ticketContract.methods.mint(
-        userAddress, concertName, concertDate, concertTime, selectedSeats, ticketCount * concertPrice
+        userAddress, concertName, concertDate, concertTime, formData.Transaction_Quantity * concertPrice, formData.Transaction_Quantity
       ).send({ from: userAddress });
   
       const tokenId = receipt.events.Transfer.returnValues.tokenId.toString(); // 토큰 아이디
   
-      alert(`${ticketCount * concertPrice}원이 정상적으로 결제되었습니다.`);
+      alert(`${formData.Transaction_Quantity * concertPrice}원이 정상적으로 결제되었습니다.`);
       console.log("공연 명: ", concertName);
       console.log("공연 날짜: ", concertDate);
       console.log("공연 시간: ", concertTime);
-      console.log("좌석: ", selectedSeats);
       console.log("구매 시간: ", now);
       console.log("구매자: ", userAddress);
       console.log("구매자 IP: ", userIp);
-      console.log("결제 금액: ", `${ticketCount * concertPrice}원`);
-      console.log("티켓 수량: ", ticketCount);
+      console.log("결제 금액: ", `${formData.Transaction_Quantity * concertPrice}원`);
+      console.log("티켓 수량: ", formData.Transaction_Quantity);
       console.log("티켓 아이디: ", tokenId); // 이 부분 추가
       handleClose();
     } catch (error) {
@@ -150,8 +190,39 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
     } finally {
       setLoading(false);
     }
-  };
 
+    try {
+      const response = await axios.post('http://localhost:8000/predict', {
+        ...formData,
+        Card_Last4: cardLast4,  // API에는 뒷 4자리만 보냄
+        Transaction_Time: currentDateTime,
+        Tranaction_diff_time: diffTime,
+        isAnormal: 'FALSE',
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      setResult(response.data);
+      setError(null);
+
+      setFormData({
+        User_ID: '',
+        Password: '',
+        Transaction_Quantity: 1,
+        Age: '',
+        Payment_Method: '',
+        Card_Type: '',
+        Card_Number: '', // 카드 번호 초기화
+        IP_Address: '182.48.151.189',
+        Device_Type: 'Desktop',
+      });
+    } catch (err) {
+      setError(err.response ? err.response.data.detail : err.message);
+      setResult(null);
+    }
+  };
 
   useEffect(() => {
     fetch('https://api.ipify.org?format=json')
@@ -166,36 +237,120 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
   }, []);
 
   return ReactDOM.createPortal(
-    <StyledBackground>
-      <StyledContainer>
-        <Title>"{concertName}" 좌석 선택</Title>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {new Array(8).fill(0).map((_, rowIndex) => (
-            <div key={rowIndex} style={{ display: 'flex', flexDirection: 'row' }}>
-              {new Array(8).fill(0).map((_, colIndex) => (
-                <Button
-                  key={`${rowIndex}-${colIndex}`}
-                  variant={selectedSeats.includes(`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`) ? 'danger' : 'success'}
-                  onClick={() => addSeatHandler(rowIndex, colIndex)}
-                  style={{ margin: '5px' }}
-                >
-                  {`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`}
-                </Button>
-              ))}
-            </div>
-          ))}
-        </div>
-        <h3>구매 : {selectedSeats.length}장 <br /> 가격 : {selectedSeats.length *  concertPrice }원</h3>
-        {selectedSeats.length > 0 ? <BuyButton onClick={sellTicket} disabled={loading}>구매</BuyButton> : <BackButton onClick={handleClose}>취소</BackButton>}
-        {ticketId && ( // 토큰 ID가 존재하면 화면에 출력
-          <div>
-            <h3>토큰 ID: {ticketId}</h3>
-          </div>
-        )}
-      </StyledContainer>
-    </StyledBackground>,
-    document.getElementById('seat')
-  );
-};
+    <AppContainer onClick={handleClose}>
+      <FormContainer onClick={(e) => e.stopPropagation()}>
+        <ConcertImage src={concertImage} alt="Concert Image" />
+        <div>
+          <h1>티켓 결제 페이지</h1>
+          <FormGroup>
+            <Label>아이디 : </Label>
+            <Input
+              type="text"
+              name="User_ID"
+              value={formData.User_ID}
+              onChange={handleChange}
+              placeholder="아이디를 입력하세요"
+            />
+          </FormGroup>
 
-export default ConcertSeat;
+          <FormGroup>
+            <Label>비밀번호 : </Label>
+            <Input
+              type="password"
+              name="Password"
+              value={formData.Password}
+              onChange={handleChange}
+              placeholder="비밀번호를 입력하세요"
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label>티켓 수량 : </Label>
+            <Input
+              type="number"
+              name="Transaction_Quantity"
+              value={formData.Transaction_Quantity}
+              onChange={handleChange}
+              min="1"
+              placeholder="티켓은 최대 3장까지 구매 가능합니다"
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label>나이 : </Label>
+            <Input
+              type="number"
+              name="Age"
+              value={formData.Age}
+              onChange={handleChange}
+              placeholder="나이를 입력하세요."
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Label>결제 수단 : </Label>
+            <Select
+              name="Payment_Method"
+              value={formData.Payment_Method}
+              onChange={handleChange}
+            >
+              <option value="">선택하시오</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="E-wallet">E-wallet</option>
+            </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <Label>카드 유형 : </Label>
+            <Select
+              name="Card_Type"
+              value={formData.Card_Type}
+              onChange={handleChange}
+            >
+              <option value="">선택하시오</option>
+              <option value="Credit">Credit</option>
+              <option value="Debit">Debit</option>
+            </Select>
+          </FormGroup>
+
+          <FormGroup>
+            <Label>카드번호 (16자리):</Label>
+            <Input
+              type="text"
+              name="Card_Number"
+              value={formData.Card_Number}
+              onChange={handleChange}
+              placeholder="카드번호 16자리를 입력하세요"
+              maxLength="16" // 카드번호는 16자리로 제한
+            />
+          </FormGroup>
+
+          <Button onClick={handleSubmit}>예매하기</Button>
+
+          {result && (
+            <ResultContainer>
+              <h2>결과</h2>
+              {result.prediction_label === 0 ? (
+                <p>티켓 예매가 완료되었습니다.</p>
+              ) : (
+                <p>매크로가 감지되었습니다. 나중에 다시 이용해 주십시오.</p>
+              )}
+              <p><strong>AI 정확도 : </strong> {result.prediction_score !== undefined ? result.prediction_score * 100 : 'No prediction score'}%</p>
+              <p><strong>이전 거래와의 시간 차 :</strong> {result.Transaction_Time !== undefined ? result.Transaction_Time : 'No transaction time'} sec</p>
+            </ResultContainer>
+          )}
+
+          {error && (
+            <ResultContainer>
+              <h2>Error</h2>
+              <p>{error}</p>
+            </ResultContainer>
+          )}
+        </div>
+      </FormContainer>
+    </AppContainer>,
+    document.getElementById('seat')
+  )
+}
+
+export default ConcertSeat

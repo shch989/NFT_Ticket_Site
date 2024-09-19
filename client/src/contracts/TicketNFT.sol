@@ -13,8 +13,8 @@ contract TicketNFT is ERC721Enumerable {
         string concertDate; // 콘서트 날짜
         string concertTime; // 콘서트 시간
         uint256 purchaseTime; // 구매 시간
-        string[] selectedSeats; // 선택된 좌석 목록
         uint256 paymentAmount; // 총 결제 금액
+        uint256 totalTicket; // 총 티켓
     }
 
     // 토큰 ID에 해당하는 티켓 구매 정보를 저장하는 배열
@@ -32,8 +32,8 @@ contract TicketNFT is ERC721Enumerable {
         string memory _concert, // 콘서트 이름
         string memory _concertDate, // 콘서트 날짜
         string memory _concertTime, // 콘서트 시간
-        string[] memory _selectedSeats, // 선택된 좌석 목록
-        uint256 _paymentAmount // 결제 금액
+        uint256 _paymentAmount, // 결제 금액
+        uint256 _totalTicket
     ) external returns (uint256) {
         // 토큰 ID 반환 선언
         uint256 tokenId = purchases.length; // 새로운 티켓의 토큰 ID
@@ -45,8 +45,8 @@ contract TicketNFT is ERC721Enumerable {
             concertDate: _concertDate,
             concertTime: _concertTime,
             purchaseTime: block.timestamp,
-            selectedSeats: _selectedSeats,
-            paymentAmount: _paymentAmount
+            paymentAmount: _paymentAmount,
+            totalTicket: _totalTicket
         });
         purchases.push(newPurchase);
         tradeHistories[tokenId].push(newPurchase);
@@ -91,8 +91,8 @@ contract TicketNFT is ERC721Enumerable {
             concertDate: purchases[_tokenId].concertDate,
             concertTime: purchases[_tokenId].concertTime,
             purchaseTime: block.timestamp,
-            selectedSeats: purchases[_tokenId].selectedSeats,
-            paymentAmount: purchases[_tokenId].paymentAmount
+            paymentAmount: purchases[_tokenId].paymentAmount,
+            totalTicket: purchases[_tokenId].totalTicket
         });
         tradeHistories[_tokenId].push(trade);
     }

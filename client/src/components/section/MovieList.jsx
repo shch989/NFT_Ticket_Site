@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import styled from 'styled-components';
 // css
-import '../../styles/common.css'
-import '../../styles/main.css'
+import '../../styles/common.css';
+import '../../styles/main.css';
 // image
-import movie1 from '../../img/poster01.jpg'
-import movie2 from '../../img/poster02.jpg'
-import movie3 from '../../img/poster03.jpg'
-import movie4 from '../../img/poster04.jpg'
-import movie5 from '../../img/poster05.jpg'
-import movie6 from '../../img/poster06.jpg'
-import movie7 from '../../img/poster07.jpg'
-import movie8 from '../../img/poster08.jpg'
-//components
-import ConcertSeat from '../seat/ConcertSeat'
+import movie1 from '../../img/poster01.jpg';
+import movie2 from '../../img/poster02.jpg';
+import movie3 from '../../img/poster03.jpg';
+import movie4 from '../../img/poster04.jpg';
+import movie5 from '../../img/poster05.jpg';
+import movie6 from '../../img/poster06.jpg';
+import movie7 from '../../img/poster07.jpg';
+import movie8 from '../../img/poster08.jpg';
+// components
+import ConcertSeat from '../seat/ConcertSeat';
 
 const MovieWapper = styled.div`
   margin-top: 50px;
@@ -35,18 +35,19 @@ const moreMovies = [
 
 const MovieList = () => {
   const [showConcertSeat, setShowConcertSeat] = useState(false);
-  const [concertName, setConcertName] = useState('')
-  const [concertdate, setConcertDate] = useState('')
-  const [concertTime, setConcertTime] = useState('')
-  const [concertPrice, setConcertPrice] = useState(0)
+  const [concertName, setConcertName] = useState('');
+  const [concertDate, setConcertDate] = useState('');
+  const [concertTime, setConcertTime] = useState('');
+  const [concertPrice, setConcertPrice] = useState(0);
+  const [concertImage, setConcertImage] = useState('');
 
-
-  const handleReserveClick = (name, date, time, price) => {
+  const handleReserveClick = (name, date, time, price, image) => {
     setShowConcertSeat(true);
-    setConcertName(name)
-    setConcertDate(date)
-    setConcertTime(time)
-    setConcertPrice(price)
+    setConcertName(name);
+    setConcertDate(date);
+    setConcertTime(time);
+    setConcertPrice(price);
+    setConcertImage(image)
   };
 
   const handleReserveUnClick = () => {
@@ -56,12 +57,12 @@ const MovieList = () => {
   return (
     <MovieWapper>
       <section id="movie">
-        <div class="container">
-          <div class="row">
-            <div class="movie-text">이번 달 추천 공연</div>
-            <div class="movie">
-              <div class="movie_chart">
-                <div class="chart_cont1">
+        <div className="container">
+          <div className="row">
+            <div className="movie-text">이번 달 추천 공연</div>
+            <div className="movie">
+              <div className="movie_chart">
+                <div className="chart_cont1">
                   {movies.map((movie, index) => (
                     <div key={index}>
                       <div className="poster">
@@ -71,13 +72,13 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price)}>예매하기</button>
+                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price, movie.image)}>예매하기</button>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div class="chart_cont2">
+                <div className="chart_cont2">
                   {moreMovies.map((movie, index) => (
                     <div key={index}>
                       <div className="poster">
@@ -87,7 +88,7 @@ const MovieList = () => {
                         <h3><strong>{movie.title}</strong></h3>
                         <div className="infor_btn">
                           <button>상세보기</button>
-                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price)}>예매하기</button>
+                          <button onClick={() => handleReserveClick(movie.title, movie.date, movie.time, movie.price, movie.image)}>예매하기</button>
                         </div>
                       </div>
                     </div>
@@ -98,7 +99,18 @@ const MovieList = () => {
           </div>
         </div>
       </section>
-      {showConcertSeat && <ConcertSeat handleClose={handleReserveUnClick} concertName={concertName} concertDate={concertdate} concertTime={concertTime} concertPrice={concertPrice} />}
+
+      {/* Portal to render ConcertSeat */}
+      {showConcertSeat && (
+        <ConcertSeat
+          concertName={concertName}
+          concertDate={concertDate}
+          concertTime={concertTime}
+          concertPrice={concertPrice}
+          concertImage={concertImage}
+          handleClose={handleReserveUnClick}
+        />
+      )}
     </MovieWapper>
   );
 };

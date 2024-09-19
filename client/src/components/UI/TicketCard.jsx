@@ -100,11 +100,6 @@ const TicketCard = (props) => {
     return date.toLocaleString();
   };
 
-  // 좌석 배열을 문자열로 변환하는 함수
-  const formatSeats = (seats) => {
-    return seats.join(', '); // 각 좌석 사이에 쉼표 추가
-  };
-
   return (
     <TicketTample>
       <TicketDate>{props.nft.concertDate}</TicketDate>
@@ -114,14 +109,13 @@ const TicketCard = (props) => {
           <ConcertTime>{props.nft.concertTime}</ConcertTime>
         </TicketHeader>
         <TicketMain>
-          <TicketMainItem><b>좌석 :</b> {formatSeats(props.nft.selectedSeats)}</TicketMainItem>
           <TicketMainItem><b>최초 구매자 :</b> {shortenedBuyer}</TicketMainItem>
           <TicketMainItem><b>구매시간 :</b> {formatPurchaseTime(props.nft.purchaseTime)}</TicketMainItem>
         </TicketMain>
         <NoticeFont>혼잡하오니 공연 입장은 공연시작 15분 전에 착석하여 주시기 바랍니다.</NoticeFont>
         <CurrentTime>{currentTime.toLocaleString()}</CurrentTime>
         <AmountPay><b>티켓ID :</b> {props.nft.tokenId.toString()}</AmountPay>
-        <AmountPay><b>티켓장수 :</b> {props.nft.selectedSeats.length}장</AmountPay>
+        <AmountPay><b>티켓장수 :</b> {props.nft.totalTicket.toString()}장</AmountPay>
         <AmountPay><b>티켓요금 합계 :</b> {props.nft.paymentAmount.toString()}원</AmountPay>
       </TicketContainer>
     </TicketTample>

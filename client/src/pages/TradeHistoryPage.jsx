@@ -187,7 +187,6 @@ const TradeHistoryPage = () => {
                   <p>콘서트 일자: {trade.concertDate}</p>
                   <p>콘서트 시간: {trade.concertTime}</p>
                   <p>양도 일자: {formatDate(parseInt(trade.purchaseTime))}</p>
-                  <p>선택된 좌석: {trade.selectedSeats}</p>
                   <p>결제 금액: {trade.paymentAmount.toString()}</p>
                 </TradeHistoryContent>
               </TradeHistoryItem>
