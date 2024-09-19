@@ -154,44 +154,16 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
   const handleSubmit = async () => {
     const currentDateTime = new Date().toISOString();
     const diffTime = Date.now() / 1000;
-
+  
     // 카드번호 뒷 4자리 추출
     const cardLast4 = formData.Card_Number.slice(-4);
-
+  
     const now = new Date();
   
     try {
       setLoading(true);
   
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const userAddress = accounts[0];
-  
-      // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
-      const receipt = await ticketContract.methods.mint(
-        userAddress, concertName, concertDate, concertTime, formData.Transaction_Quantity * concertPrice, formData.Transaction_Quantity
-      ).send({ from: userAddress });
-  
-      const tokenId = receipt.events.Transfer.returnValues.tokenId.toString(); // 토큰 아이디
-  
-      alert(`${formData.Transaction_Quantity * concertPrice}원이 정상적으로 결제되었습니다.`);
-      console.log("공연 명: ", concertName);
-      console.log("공연 날짜: ", concertDate);
-      console.log("공연 시간: ", concertTime);
-      console.log("구매 시간: ", now);
-      console.log("구매자: ", userAddress);
-      console.log("구매자 IP: ", userIp);
-      console.log("결제 금액: ", `${formData.Transaction_Quantity * concertPrice}원`);
-      console.log("티켓 수량: ", formData.Transaction_Quantity);
-      console.log("티켓 아이디: ", tokenId); // 이 부분 추가
-      handleClose();
-    } catch (error) {
-      console.error("에러 발생:", error);
-      alert("거래가 중지되었습니다.");
-    } finally {
-      setLoading(false);
-    }
-
-    try {
+      // 예측 결과 가져오기
       const response = await axios.post('http://localhost:8000/predict', {
         ...formData,
         Card_Last4: cardLast4,  // API에는 뒷 4자리만 보냄
@@ -203,10 +175,37 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
           'Content-Type': 'application/json',
         },
       });
-
+  
       setResult(response.data);
       setError(null);
-
+  
+      // 예측 결과에 따라 거래 처리
+      if (response.data.prediction_label === 0) {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const userAddress = accounts[0];
+  
+        // Mint 함수 호출 후에 반환된 토큰 ID를 얻기 위해 변수에 할당
+        const receipt = await ticketContract.methods.mint(
+          userAddress, concertName, concertDate, concertTime, formData.Transaction_Quantity * concertPrice, formData.Transaction_Quantity
+        ).send({ from: userAddress });
+  
+        const tokenId = receipt.events.Transfer.returnValues.tokenId.toString(); // 토큰 아이디
+  
+        alert(`${formData.Transaction_Quantity * concertPrice}원이 정상적으로 결제되었습니다.`);
+        console.log("공연 명: ", concertName);
+        console.log("공연 날짜: ", concertDate);
+        console.log("공연 시간: ", concertTime);
+        console.log("구매 시간: ", now);
+        console.log("구매자: ", userAddress);
+        console.log("구매자 IP: ", userIp);
+        console.log("결제 금액: ", `${formData.Transaction_Quantity * concertPrice}원`);
+        console.log("티켓 수량: ", formData.Transaction_Quantity);
+        console.log("티켓 아이디: ", tokenId); // 이 부분 추가
+        handleClose();
+      } else {
+        alert("매크로가 감지되었습니다. 나중에 다시 이용해 주십시오.");
+      }
+  
       setFormData({
         User_ID: '',
         Password: '',
@@ -221,8 +220,10 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
     } catch (err) {
       setError(err.response ? err.response.data.detail : err.message);
       setResult(null);
+    } finally {
+      setLoading(false);
     }
-  };
+  };  
 
   useEffect(() => {
     fetch('https://api.ipify.org?format=json')
@@ -326,26 +327,6 @@ const ConcertSeat = ({ concertName, handleClose, concertDate, concertTime, conce
           </FormGroup>
 
           <Button onClick={handleSubmit}>예매하기</Button>
-
-          {result && (
-            <ResultContainer>
-              <h2>결과</h2>
-              {result.prediction_label === 0 ? (
-                <p>티켓 예매가 완료되었습니다.</p>
-              ) : (
-                <p>매크로가 감지되었습니다. 나중에 다시 이용해 주십시오.</p>
-              )}
-              <p><strong>AI 정확도 : </strong> {result.prediction_score !== undefined ? result.prediction_score * 100 : 'No prediction score'}%</p>
-              <p><strong>이전 거래와의 시간 차 :</strong> {result.Transaction_Time !== undefined ? result.Transaction_Time : 'No transaction time'} sec</p>
-            </ResultContainer>
-          )}
-
-          {error && (
-            <ResultContainer>
-              <h2>Error</h2>
-              <p>{error}</p>
-            </ResultContainer>
-          )}
         </div>
       </FormContainer>
     </AppContainer>,
