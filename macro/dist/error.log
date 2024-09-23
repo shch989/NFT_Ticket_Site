@@ -1,0 +1,20 @@
+ERROR:root:2024-09-20 10:23:07.698231
+ERROR:root:Traceback (most recent call last):
+  File "macro_app.py", line 335, in <module>
+SystemExit: 0
+
+ERROR:root:2024-09-20 10:23:08.700748
+ERROR:root:Traceback (most recent call last):
+  File "macro_app.py", line 335, in <module>
+SystemExit: 0
+
+ERROR:root:2024-09-20 10:30:44.582669
+ERROR:root:Traceback (most recent call last):
+  File "macro_app.py", line 335, in <module>
+SystemExit: 0
+
+ERROR:root:2024-09-20 10:48:51.103186
+ERROR:root:Traceback (most recent call last):
+  File "macro_app.py", line 418, in <module>
+SystemExit: 0
+
